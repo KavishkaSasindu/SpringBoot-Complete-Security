@@ -1,5 +1,6 @@
 package com.example.demoSecurity.config;
 
+import com.example.demoSecurity.filter.JwtFilter;
 import com.example.demoSecurity.service.MyUserDetailsService;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Data
 @NoArgsConstructor
@@ -24,10 +26,12 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private MyUserDetailsService myUserDetailsService;
+    private JwtFilter jwtFilter;
 
     @Autowired
-    public SecurityConfig(MyUserDetailsService myUserDetailsService) {
+    public SecurityConfig(MyUserDetailsService myUserDetailsService,JwtFilter jwtFilter) {
         this.myUserDetailsService = myUserDetailsService;
+        this.jwtFilter = jwtFilter;
     }
 
     @Bean
@@ -44,6 +48,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request->
                         request.requestMatchers("/user/register","/user/login").permitAll().anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement(session->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 

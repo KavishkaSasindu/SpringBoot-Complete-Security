@@ -1,5 +1,6 @@
 package com.example.demoSecurity.service;
 
+import com.example.demoSecurity.dto.UserResponse;
 import com.example.demoSecurity.model.UserModel;
 import com.example.demoSecurity.repo.UserRepo;
 import lombok.Data;
@@ -44,7 +45,7 @@ public class UserService {
     }
 
 //    login
-    public String logIn(UserModel user) {
+    public UserResponse logIn(UserModel user) {
         if(user != null) {
 
             UserModel userModel = userRepo.findByUsername(user.getUsername());
@@ -54,12 +55,16 @@ public class UserService {
 
                 if(authentication.isAuthenticated()) {
                     String token = jwtService.generateToken(user.getUsername());
-                    return (authentication.getName()+ " Logged In "+token );
+                    return (new UserResponse(
+                            user.getId(),
+                            user.getUsername(),
+                            token
+                    ));
                 }
             }
-            return "Bad Credentials";
+            return null;
         }
 
-        return "Bad Credentials";
+        return null;
     }
 }

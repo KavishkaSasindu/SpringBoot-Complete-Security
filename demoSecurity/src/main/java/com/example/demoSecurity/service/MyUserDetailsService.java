@@ -17,17 +17,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private UserRepo userrepo;
+    private UserRepo userRepo;
 
     @Autowired
-    public MyUserDetailsService(UserRepo userrepo) {
-        this.userrepo = userrepo;
+    public MyUserDetailsService(UserRepo userRepo) {
+        this.userRepo = userRepo;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        UserModel user = userrepo.findByUsername(username);
+        UserModel user = userRepo.findByUsername(username);
 
         if(user == null) {
             throw new UsernameNotFoundException(username);

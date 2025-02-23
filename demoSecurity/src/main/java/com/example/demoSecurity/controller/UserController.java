@@ -1,5 +1,6 @@
 package com.example.demoSecurity.controller;
 
+import com.example.demoSecurity.dto.UserResponse;
 import com.example.demoSecurity.model.UserModel;
 import com.example.demoSecurity.service.JwtService;
 import com.example.demoSecurity.service.UserService;
@@ -40,9 +41,16 @@ public class UserController {
 //    login user
     @PostMapping("/login")
     public ResponseEntity<?> logInUser(@RequestBody UserModel user) {
+
         try{
             if(user != null) {
-                return ResponseEntity.status(HttpStatus.OK).body(userService.logIn(user));
+
+                UserResponse  userResponse = userService.logIn(user);
+
+                if(userResponse != null) {
+                    return ResponseEntity.status(HttpStatus.OK).body(userResponse);
+                }
+
             }
 
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or password is incorrect");
@@ -56,13 +64,4 @@ public class UserController {
     public ResponseEntity<?> testController() {
         return ResponseEntity.status(HttpStatus.OK).body("Hello World User");
     }
-
-//    @GetMapping("/token")
-//    public ResponseEntity<?> getToken() {
-//        try{
-//            return ResponseEntity.status(HttpStatus.OK).body(jwtService.generateToken("kavishka"));
-//        }catch (Exception e){
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-//        }
-//    }
 }
