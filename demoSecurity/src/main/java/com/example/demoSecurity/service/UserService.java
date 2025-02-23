@@ -20,11 +20,13 @@ public class UserService {
     private UserRepo userRepo;
     BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
     AuthenticationManager authenticationManager;
+    private JwtService jwtService;
 
     @Autowired
-    public UserService (UserRepo userRepo,AuthenticationManager authenticationManager) {
+    public UserService (UserRepo userRepo,AuthenticationManager authenticationManager,JwtService jwtService) {
         this.userRepo = userRepo;
         this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
     }
 
 //    register user in db
@@ -51,7 +53,8 @@ public class UserService {
                 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
 
                 if(authentication.isAuthenticated()) {
-                    return (authentication.getName()+ " Logged In");
+                    String token = jwtService.generateToken(user.getUsername());
+                    return (authentication.getName()+ " Logged In "+token );
                 }
             }
             return "Bad Credentials";
