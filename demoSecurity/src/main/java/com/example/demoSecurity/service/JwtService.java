@@ -40,4 +40,5 @@ public class JwtService {
                 .signWith(secretKey, SignatureAlgorithm.HS256)
                 .compact();
     }
+
 }

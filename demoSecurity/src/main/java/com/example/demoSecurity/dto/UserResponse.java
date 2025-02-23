@@ -6,11 +6,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class UserResponse {
     private int id;
     private String username;
-    private String password;
     private String token;
 
     public UserResponse(int id, String username, String token) {
